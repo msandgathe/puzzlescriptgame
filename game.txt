@@ -2,6 +2,8 @@ title My Game
 author Mia & Enzo
 homepage 0.0.0.0
 
+realtime_interval 0.1
+
 ========
 OBJECTS
 ========
@@ -81,6 +83,40 @@ transparent White
 01000
 00000
 
+Timer10
+transparent
+
+Timer9
+transparent
+
+Timer8
+transparent
+
+Timer7
+transparent
+
+Timer6
+transparent
+
+Timer5
+transparent
+
+Timer4
+transparent
+
+Timer3
+transparent
+
+Timer2
+transparent
+
+Timer1
+transparent
+
+TimerDone
+transparent
+
+
 =======
 LEGEND
 =======
@@ -91,6 +127,7 @@ P = PlayerUp
 AnySword = SwordUp or SwordDown or SwordLeft or SwordRight
 Player = PlayerUp or PlayerDown or PlayerLeft or PlayerRight
 
+Timer = Timer10 or Timer9 or Timer8 or Timer7 or Timer6 or Timer5 or Timer4 or Timer3 or Timer2 or Timer1 or TimerDone
 =======
 SOUNDS
 =======
@@ -103,20 +140,40 @@ Background
 SwordUp, SwordDown, SwordLeft, SwordRight
 Player, Wall
 
+Timer10, Timer9, Timer8, Timer7, Timer6, Timer5, Timer4, Timer3, Timer2, Timer1, TimerDone
 
 ======
 RULES     
 ======
 
+
+(make the player face the direction they more)
 [ LEFT Player ] -> [ LEFT PlayerLeft ]
 [ RIGHT Player ] -> [ RIGHT PlayerRight ]
 [ UP Player ] -> [ UP PlayerUp ]
 [ DOWN Player ] -> [ DOWN PlayerDown ]
 
-UP [ Action PlayerUp | ] -> [ PlayerUp | SwordUp ]
-DOWN [ Action PlayerDown | ] -> [ PlayerDown | SwordDown ]
-LEFT [ Action PlayerLeft | ] -> [ PlayerLeft | SwordLeft ]
-RIGHT [ Action PlayerRight | ] -> [ PlayerRight | SwordRight ]
+(make the sword appear in the direction the player is facing)
+UP [ Action PlayerUp | no Timer] -> [ PlayerUp | SwordUp Timer5 ]
+DOWN [ Action PlayerDown | no Timer] -> [ PlayerDown | SwordDown Timer5 ]
+LEFT [ Action PlayerLeft | no Timer] -> [ PlayerLeft | SwordLeft Timer5]
+RIGHT [ Action PlayerRight | no Timer] -> [ PlayerRight | SwordRight Timer5]
+
+(make timer tick down)
+[ stationary Player ] [Timer10] -> [ stationary Player ] [ Timer9 ]
+[ stationary Player ] [Timer9] -> [ stationary Player ] [ Timer8 ]
+[ stationary Player ] [Timer8] -> [ stationary Player ] [ Timer7 ]
+[ stationary Player ] [Timer7] -> [ stationary Player ] [ Timer6 ]
+[ stationary Player ] [Timer6] -> [ stationary Player ] [ Timer5 ]
+[ stationary Player ] [Timer5] -> [ stationary Player ] [ Timer4 ]
+[ stationary Player ] [Timer4] -> [ stationary Player ] [ Timer3 ]
+[ stationary Player ] [Timer3] -> [ stationary Player ] [ Timer2 ]
+[ stationary Player ] [Timer2] -> [ stationary Player ] [ Timer1 ]
+[ stationary Player ] [Timer1] -> [ stationary Player ] [ TimerDone ]
+
+(make sword disappear if timer runs out)
+[ stationary Player ] [ TimerDone AnySword ] -> [ stationary Player ] []
+
 
 ==============
 WINCONDITIONS
