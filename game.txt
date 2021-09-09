@@ -6,6 +6,14 @@ homepage 0.0.0.0
 OBJECTS
 ========
 
+Wall
+Gray
+00000
+00000
+00000
+00000
+00000
+
 Background
 Brown
 
@@ -73,27 +81,13 @@ transparent White
 01000
 00000
 
-Digit0
-transparent Red
-01110
-10001
-10001
-10001
-01110
-
-Digit1
-transparent Red
-00100
-01100
-00100
-00100
-01110
 =======
 LEGEND
 =======
 
 P = PlayerUp
 . = Background
+# = Wall
 AnySword = SwordUp or SwordDown or SwordLeft or SwordRight
 Player = PlayerUp or PlayerDown or PlayerLeft or PlayerRight
 
@@ -107,8 +101,7 @@ COLLISIONLAYERS
 
 Background
 SwordUp, SwordDown, SwordLeft, SwordRight
-Player
-Digit0, Digit1
+Player, Wall
 
 
 ======
@@ -120,6 +113,11 @@ RULES
 [ UP Player ] -> [ UP PlayerUp ]
 [ DOWN Player ] -> [ DOWN PlayerDown ]
 
+UP [ Action PlayerUp | ] -> [ PlayerUp | SwordUp ]
+DOWN [ Action PlayerDown | ] -> [ PlayerDown | SwordDown ]
+LEFT [ Action PlayerLeft | ] -> [ PlayerLeft | SwordLeft ]
+RIGHT [ Action PlayerRight | ] -> [ PlayerRight | SwordRight ]
+
 ==============
 WINCONDITIONS
 ==============
@@ -129,8 +127,20 @@ WINCONDITIONS
 =======     
 LEVELS
 =======
-.......
-.......
-....P..
-.......
-.......
+##############################
+#............................#
+#............................#
+#............................#
+#............................#
+#............................#
+#............................#
+#.............P..............#
+#............................#
+#............................#
+#............................#
+#............................#
+#............................#
+#............................#
+#............................#
+#............................#
+##############################
