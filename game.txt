@@ -118,6 +118,17 @@ transparent
 TimerDone
 transparent
 
+EnemyBase
+transparent
+
+BasicEnemy
+transparent Red
+01110
+11111
+11111
+11111
+01110
+
 =======
 LEGEND
 =======
@@ -129,6 +140,11 @@ AnySword = SwordUp or SwordDown or SwordLeft or SwordRight
 Player = PlayerUp or PlayerDown or PlayerLeft or PlayerRight
 
 Timer = Timer10 or Timer9 or Timer8 or Timer7 or Timer6 or Timer5 or Timer4 or Timer3 or Timer2 or Timer1 or TimerDone
+
+BasicEnemyWithHelpers = BasicEnemy and EnemyBase
+x = BasicEnemyWithHelpers
+
+EnemyAis = BasicEnemy
 =======
 SOUNDS
 =======
@@ -140,7 +156,8 @@ COLLISIONLAYERS
 Background
 SwordUp, SwordDown, SwordLeft, SwordRight
 Player, Wall
-
+EnemyBase
+BasicEnemy
 Timer10, Timer9, Timer8, Timer7, Timer6, Timer5, Timer4, Timer3, Timer2, Timer1, TimerDone
 
 ======
@@ -174,12 +191,15 @@ RIGHT [ Action PlayerRight | no Timer]  -> [ PlayerRight | SwordRight Timer5 ]
 [ stationary Player ] [Timer9] -> [ stationary Player ] [ Timer8 ]
 [ stationary Player ] [Timer10] -> [ stationary Player ] [ Timer9 ]
 
-
-
 (make sword disappear if timer runs out)
 [ stationary Player ] [ TimerDone AnySword ] -> [ stationary Player ] []
 
+(if the enemy is on or next to the sword, delete it)
+[ AnySword EnemyBase ] -> [ AnySword ]
+[ AnySword | EnemyBase ] -> [ AnySword | ]
 
+(if the enemybase of an enemy is killed, delete the enemy as well)
+[ no EnemyBase EnemyAis ] -> [ ]
 ==============
 WINCONDITIONS
 ==============
@@ -194,9 +214,9 @@ LEVELS
 #............................##.............#
 #............................##.............#
 #............................##.............#
-#............................##.............#
-#............................##.............#
-#............................##.............#
+#............x...............##.............#
+#.....x......................##.............#
+#.....................x......##.............#
 #............................##.............#
 #............................##.............#
 #............................##.............#
