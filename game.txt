@@ -21,6 +21,22 @@ Gray
 Background
 Brown
 
+target
+green
+00000
+00000
+00000
+00000
+00000
+
+Crate
+white
+00000
+00000
+00000
+00000
+00000
+
 PlayerUp
 transparent Blue White
 02120
@@ -136,6 +152,8 @@ LEGEND
 P = PlayerUp
 . = Background
 # = Wall
+C = Crate
+T = Target
 AnySword = SwordUp or SwordDown or SwordLeft or SwordRight
 Player = PlayerUp or PlayerDown or PlayerLeft or PlayerRight
 
@@ -155,7 +173,7 @@ COLLISIONLAYERS
 
 Background
 SwordUp, SwordDown, SwordLeft, SwordRight
-Player, Wall
+Player, Wall, Crate, Target
 EnemyBase
 BasicEnemy
 Timer10, Timer9, Timer8, Timer7, Timer6, Timer5, Timer4, Timer3, Timer2, Timer1, TimerDone
@@ -163,6 +181,11 @@ Timer10, Timer9, Timer8, Timer7, Timer6, Timer5, Timer4, Timer3, Timer2, Timer1,
 ======
 RULES     
 ======
+
+(Crate thing move)
+[ > Player | Crate ] -> [ > Player | > Crate ]
+
+[ > Crate | Target ] -> [ | ]
 
 (if the player is next to a sword i.e. attacking, they can't move)
 [ moving Player | AnySword ] -> [ stationary Player | AnySword ]
@@ -226,14 +249,14 @@ LEVELS
 #............................##.............#
 ######################.######################
 ######################.######################
-#.............##.............##.............#
+#T............##.............##.............#
 #..#.######.####.............##.............#
 ###...........##.............##.............#
 ##...##....#..##.............##.............#
 #...#.#.......##.............##.............#
 #.....#..#..#.##.............##.............#
 ##....#...............p.....................#
-#...#.#.#.....##.............##.............#
+#...#.#.#.C...##.............##.............#
 #.....#.......##.............##.............#
 #..#..#.......##.............##.............#
 #.....#....#..##.............##.............#
