@@ -145,6 +145,98 @@ transparent Red
 11111
 01110
 
+NumberCounter0
+transparent red
+01110
+10001
+10001
+10001
+01110
+
+NumberCounter1
+transparent red
+00100
+01100
+00100
+00100
+01110
+
+NumberCounter2
+transparent red
+01100
+10010
+00100
+01000
+11111
+
+NumberCounter3
+transparent red
+01110
+10001
+00010
+10001
+01110
+
+NumberCounter4
+transparent red
+10100
+10100
+11111
+00100
+00100
+
+NumberCounter5
+transparent red
+11111
+10000
+11110
+00001
+11110
+
+NumberCounter6
+transparent red
+01000
+10000
+11100
+10100
+11100
+
+NumberCounter7
+transparent red
+11111
+00010
+01110
+01000
+10000
+
+NumberCounter8
+transparent red
+01110
+10001
+01110
+10001
+01110
+
+NumberCounter9
+transparent red
+01110
+10001
+01110
+00001
+00001
+
+FirstDigitIndicator
+transparent
+SecondDigitIndicator
+transparent
+ThirdDigitIndicator
+transparent
+
+PlayerSwordIndicator
+transparent
+
+EnemyAttackingIndicator
+transparent
 =======
 LEGEND
 =======
@@ -154,6 +246,11 @@ P = PlayerUp
 # = Wall
 C = Crate
 T = Target
+
+0 = NumberCounter0 and FirstDigitIndicator
+1 = NumberCounter0 and SecondDigitIndicator
+2 = NumberCounter0 and ThirdDigitIndicator
+
 AnySword = SwordUp or SwordDown or SwordLeft or SwordRight
 Player = PlayerUp or PlayerDown or PlayerLeft or PlayerRight
 
@@ -172,11 +269,15 @@ COLLISIONLAYERS
 ================
 
 Background
+NumberCounter0, NumberCounter1, NumberCounter2, NumberCounter3, NumberCounter4, NumberCounter5, NumberCounter6, NumberCounter7, NumberCounter8, NumberCounter9
 SwordUp, SwordDown, SwordLeft, SwordRight
 Player, Wall, Crate, Target
 EnemyBase
 BasicEnemy
 Timer10, Timer9, Timer8, Timer7, Timer6, Timer5, Timer4, Timer3, Timer2, Timer1, TimerDone
+FirstDigitIndicator, SecondDigitIndicator, ThirdDigitIndicator
+PlayerSwordIndicator
+EnemyAttackingIndicator
 
 ======
 RULES     
@@ -188,7 +289,7 @@ RULES
 [ > Crate | Target ] -> [ | ]
 
 (if the player is next to a sword i.e. attacking, they can't move)
-[ moving Player | AnySword ] -> [ stationary Player | AnySword ]
+[ moving Player | PlayerSwordIndicator ] -> [ stationary Player | PlayerSwordIndicator ]
 
 (make the player face the direction they more)
 [ LEFT Player ] -> [ LEFT PlayerLeft ]
@@ -197,10 +298,10 @@ RULES
 [ DOWN Player ] -> [ DOWN PlayerDown ]
 
 (make the sword appear in the direction the player is facing)
-UP [ Action PlayerUp | no Timer]   -> [ PlayerUp | SwordUp Timer5 ] 
-DOWN [ Action PlayerDown | no Timer]  -> [ PlayerDown | SwordDown Timer5 ]
-LEFT [ Action PlayerLeft | no Timer]  -> [ PlayerLeft | SwordLeft Timer5]
-RIGHT [ Action PlayerRight | no Timer]  -> [ PlayerRight | SwordRight Timer5 ]
+UP [ Action PlayerUp | no Timer]   -> [ PlayerUp | SwordUp Timer5 PlayerSwordIndicator] 
+DOWN [ Action PlayerDown | no Timer]  -> [ PlayerDown | SwordDown Timer5 PlayerSwordIndicator ]
+LEFT [ Action PlayerLeft | no Timer]  -> [ PlayerLeft | SwordLeft Timer5 PlayerSwordIndicator]
+RIGHT [ Action PlayerRight | no Timer]  -> [ PlayerRight | SwordRight Timer5 PlayerSwordIndicator]
 
 (make timer tick down)
 [ stationary Player ] [Timer1] -> [ stationary Player ] [ TimerDone ]
@@ -217,17 +318,53 @@ RIGHT [ Action PlayerRight | no Timer]  -> [ PlayerRight | SwordRight Timer5 ]
 (make sword disappear if timer runs out)
 [ stationary Player ] [ TimerDone AnySword ] -> [ stationary Player ] []
 
-(if the enemy is on or next to the sword, delete it)
-[ AnySword EnemyBase ] -> [ AnySword ]
-[ AnySword | EnemyBase ] -> [ AnySword | ]
+(if the enemy is on or next to the sword, delete it, but only if it was the player's sword)
+[ AnySword PlayerSwordIndicator EnemyBase ] -> [ AnySword PlayerSwordIndicator]
+[ AnySword PlayerSwordIndicator | EnemyBase ] -> [ AnySword PlayerSwordIndicator | ]
 
 (if the enemybase of an enemy is killed, delete the enemy as well)
 [ no EnemyBase EnemyAis ] -> [ ]
+
+(make enemies kill the player)
+[ EnemyBase Player ] -> [ EnemyBase ]
+
+(make the enemy follow the player)
+[ Action Player ] [ AnySword NumberCounter0 ] -> [ Action Player ] [ NumberCounter1 ]
+
+(make counters count when hit with a sword)
+[ AnySword NumberCounter0 ] -> [ NumberCounter1 no Timer ]
+[ AnySword NumberCounter1 ] -> [ NumberCounter2 no Timer ]
+[ AnySword NumberCounter2 ] -> [ NumberCounter3 no Timer ]
+[ AnySword NumberCounter3 ] -> [ NumberCounter4 no Timer ]
+[ AnySword NumberCounter4 ] -> [ NumberCounter5 no Timer ]
+[ AnySword NumberCounter5 ] -> [ NumberCounter6 no Timer ]
+[ AnySword NumberCounter6 ] -> [ NumberCounter7 no Timer ]
+[ AnySword NumberCounter7 ] -> [ NumberCounter8 no Timer ]
+[ AnySword NumberCounter8 ] -> [ NumberCounter9 no Timer ]
+[ AnySword NumberCounter9 ] -> [ NumberCounter0 no Timer ]
+
+(make the playerswordindicator disappear if not on a sword)
+[ PlayerSwordIndicator no AnySword ] -> []
+
+(make basicenemy attack player with sword)
+LEFT [ BasicEnemy no EnemyAttackingIndicator | no AnySword | ... | Player ] -> [ BasicEnemy EnemyAttackingIndicator Timer10 | SwordLeft Timer10 | ... | Player ]
+RIGHT [ BasicEnemy no EnemyAttackingIndicator | no AnySword | ... | Player ] -> [ BasicEnemy EnemyAttackingIndicator Timer10 | SwordRight Timer10 | ... | Player ]
+UP [ BasicEnemy no EnemyAttackingIndicator| no AnySword | ... | Player ] -> [ BasicEnemy EnemyAttackingIndicator Timer10 | SwordUp Timer10 | ... | Player ]
+DOWN [ BasicEnemy no EnemyAttackingIndicator| no AnySword | ... | Player ] -> [ BasicEnemy EnemyAttackingIndicator Timer10 | SwordDown Timer10 | ... | Player ]
+
+(make the player die if attacked with a sword)
+[ Player | AnySword no PlayerSwordIndicator ] -> [ | AnySword no PlayerSwordIndicator ]
+[ Player AnySword no PlayerSwordIndicator ] -> [ AnySword no PlayerSwordIndicator ]
+
+(make enemyattackingindicator disappear after a second)
+[ EnemyAttackingIndicator TimerDone ] -> [ ]
 ==============
 WINCONDITIONS
 ==============
 
- 
+some NumberCounter4 on FirstDigitIndicator
+some NumberCounter2 on SecondDigitIndicator
+some NumberCounter0 on ThirdDigitIndicator
 
 =======     
 LEVELS
@@ -251,7 +388,7 @@ LEVELS
 ######################.######################
 #T............##.............##.............#
 #..#.######.####.............##.............#
-###...........##.............##.............#
+###...........##....012......##.............#
 ##...##....#..##.............##.............#
 #...#.#.......##.............##.............#
 #.....#..#..#.##.............##.............#
