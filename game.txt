@@ -62,7 +62,7 @@ white
 00000
 
 PlayerUp
-transparent Blue White
+transparent Blue red
 02120
 11111
 11111
@@ -70,7 +70,7 @@ transparent Blue White
 01110
 
 PlayerDown
-transparent Blue White
+transparent Blue red
 01110
 11111
 11111
@@ -78,7 +78,7 @@ transparent Blue White
 02120
 
 PlayerLeft
-transparent Blue White
+transparent Blue red
 01110
 21111
 11111
@@ -86,7 +86,7 @@ transparent Blue White
 01110
 
 PlayerRight
-transparent Blue White
+transparent Blue red
 01110
 11112
 11111
@@ -353,7 +353,6 @@ x = BasicEnemyWithHelpers
 
 k = BasicEnemyWithHelpers and KeyDropper
 
-t = Clue0
 
 EnemyAis = BasicEnemy
 =======
@@ -377,7 +376,7 @@ PlayerSwordIndicator
 EnemyAttackingIndicator
 KeyDropper
 Key
-Lock
+Lock, otherlock
 Clue4, Clue2, Clue0
 
 ======
