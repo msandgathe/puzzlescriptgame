@@ -19,7 +19,7 @@ Black
 00000
 
 Background
-Brown
+white
 
 target
 green
@@ -288,6 +288,38 @@ transparent Blue
 11111
 00100
 00100
+
+Clue2
+transparent Orange
+01100
+10010
+00100
+01000
+11111
+
+Clue0
+transparent Green
+01110
+10001
+10001
+10001
+01110
+
+BlueFloor
+blue
+OrangeFloor
+orange
+GreenFloor
+green
+
+otherlock
+transparent black gray
+00100
+01010
+22222
+22122
+22122
+
 =======
 LEGEND
 =======
@@ -303,9 +335,13 @@ S = spike
 
 L = Lock
 
-0 = NumberCounter0 and FirstDigitIndicator
-1 = NumberCounter0 and SecondDigitIndicator
-2 = NumberCounter0 and ThirdDigitIndicator
+g = key
+
+o = otherlock
+
+0 = NumberCounter0 and FirstDigitIndicator and BlueFloor
+1 = NumberCounter0 and SecondDigitIndicator and OrangeFloor
+2 = NumberCounter0 and ThirdDigitIndicator and GreenFloor
 
 AnySword = SwordUp or SwordDown or SwordLeft or SwordRight
 Player = PlayerUp or PlayerDown or PlayerLeft or PlayerRight
@@ -317,6 +353,8 @@ x = BasicEnemyWithHelpers
 
 k = BasicEnemyWithHelpers and KeyDropper
 
+t = Clue0
+
 EnemyAis = BasicEnemy
 =======
 SOUNDS
@@ -327,6 +365,7 @@ COLLISIONLAYERS
 ================
 
 Background
+BlueFloor, GreenFloor, OrangeFloor
 NumberCounter0, NumberCounter1, NumberCounter2, NumberCounter3, NumberCounter4, NumberCounter5, NumberCounter6, NumberCounter7, NumberCounter8, NumberCounter9
 SwordUp, SwordDown, SwordLeft, SwordRight, spikeU, spikeD, spike,
 Player, Wall, Crate, Target
@@ -339,7 +378,7 @@ EnemyAttackingIndicator
 KeyDropper
 Key
 Lock
-Clue4
+Clue4, Clue2, Clue0
 
 ======
 RULES     
@@ -348,7 +387,7 @@ RULES
 (Crate thing move)
 [ > Player | Crate ] -> [ > Player | > Crate ]
 
-[ > Crate | Target ] -> [ | ]
+[ > Crate | Target ] -> [ | Clue2]
 
 (if the player is next to a sword i.e. attacking, they can't move)
 [ moving Player | PlayerSwordIndicator ] -> [ stationary Player | PlayerSwordIndicator ]
@@ -435,6 +474,7 @@ DOWN [ BasicEnemy no EnemyAttackingIndicator| no AnySword | ... | Player ] -> [ 
 
 (make unlocking the lock with the key reveal the clue)
 [Key Lock] -> [Clue4]
+[Key otherlock] -> [Clue0]
 
 ==============
 WINCONDITIONS
@@ -479,10 +519,10 @@ LEVELS
 #.....#.......##.............##.............#
 ######################.######################
 ######################.######################
-#.............##ududududududu##.............#
+#....o........##ududududududu##.............#
 #.............##dududu.ududud##.............#
 #.............##ududu.udududu##.............#
-#.............##dudududududud##.............#
+#....g........##dudududududud##.............#
 #.............##ududu.u.ududu##.............#
 #..#############dudududududud##.............#
 #......usd##.....dududu.ududu##.............#
