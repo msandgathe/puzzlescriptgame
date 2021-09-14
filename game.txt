@@ -340,8 +340,8 @@ g = key
 o = otherlock
 
 0 = NumberCounter0 and FirstDigitIndicator and BlueFloor
-1 = NumberCounter0 and SecondDigitIndicator and OrangeFloor
-2 = NumberCounter0 and ThirdDigitIndicator and GreenFloor
+1 = NumberCounter1 and SecondDigitIndicator and OrangeFloor
+2 = NumberCounter2 and ThirdDigitIndicator and GreenFloor
 
 AnySword = SwordUp or SwordDown or SwordLeft or SwordRight
 Player = PlayerUp or PlayerDown or PlayerLeft or PlayerRight
