@@ -19,7 +19,7 @@ Black
 00000
 
 Background
-white
+lightgray
 
 target
 green
