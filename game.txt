@@ -237,6 +237,33 @@ transparent
 
 EnemyAttackingIndicator
 transparent
+
+KeyDropper
+transparent
+
+Key
+transparent Yellow
+01110
+01010
+01110
+00100
+00110
+
+Lock
+transparent black gray
+00100
+01010
+22222
+22122
+22122
+
+Clue4
+transparent Blue
+10100
+10100
+11111
+00100
+00100
 =======
 LEGEND
 =======
@@ -246,6 +273,8 @@ P = PlayerUp
 # = Wall
 C = Crate
 T = Target
+
+L = Lock
 
 0 = NumberCounter0 and FirstDigitIndicator
 1 = NumberCounter0 and SecondDigitIndicator
@@ -258,6 +287,8 @@ Timer = Timer10 or Timer9 or Timer8 or Timer7 or Timer6 or Timer5 or Timer4 or T
 
 BasicEnemyWithHelpers = BasicEnemy and EnemyBase
 x = BasicEnemyWithHelpers
+
+k = BasicEnemyWithHelpers and KeyDropper
 
 EnemyAis = BasicEnemy
 =======
@@ -278,6 +309,10 @@ Timer10, Timer9, Timer8, Timer7, Timer6, Timer5, Timer4, Timer3, Timer2, Timer1,
 FirstDigitIndicator, SecondDigitIndicator, ThirdDigitIndicator
 PlayerSwordIndicator
 EnemyAttackingIndicator
+KeyDropper
+Key
+Lock
+Clue4
 
 ======
 RULES     
@@ -358,6 +393,15 @@ DOWN [ BasicEnemy no EnemyAttackingIndicator| no AnySword | ... | Player ] -> [ 
 
 (make enemyattackingindicator disappear after a second)
 [ EnemyAttackingIndicator TimerDone ] -> [ ]
+
+(make enemy drop key)
+[ KeyDropper no EnemyBase ] -> [ Key ]
+
+(make key follow player)
+[> Player Key] -> [> Player > Key]
+
+(make unlocking the lock with the key reveal the clue)
+[Key Lock] -> [Clue4]
 ==============
 WINCONDITIONS
 ==============
@@ -365,17 +409,17 @@ WINCONDITIONS
 some NumberCounter4 on FirstDigitIndicator
 some NumberCounter2 on SecondDigitIndicator
 some NumberCounter0 on ThirdDigitIndicator
-
+no EnemyBase
 =======     
 LEVELS
 =======
 
 #############################################
-#............................##.............#
+#L...........................##.............#
 #............................##.............#
 #............................##.............#
 #............x...............##.............#
-#.....x......................##.............#
+#.....k......................##.............#
 #.....................x......##.............#
 #............................##.............#
 #............................##.............#
